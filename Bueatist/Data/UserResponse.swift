@@ -13,7 +13,7 @@ import Foundation
 
 // MARK: - 유저
 struct UserResponse: Codable {
-    let objectID, username, email, createdAt: String?
+    let objectID, username, email, createdAt, password: String?
     let updatedAt: String?
     let acl: ACL?
     let type, className, sessionToken: String?
@@ -24,6 +24,7 @@ struct UserResponse: Codable {
         case acl = "ACL"
         case type = "__type"
         case className, sessionToken
+        case password
     }
 }
 

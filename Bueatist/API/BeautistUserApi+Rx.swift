@@ -11,15 +11,16 @@ import RxCocoa
 
 extension BeautistUserApi {
     
-
     
+    
+    // ⭐️
     /// - Parameters:
     ///   - userName: 유저닉네임
     ///   - email: 유저이메일
     ///   - password: 유저패스워드
     ///   - completion: 응답타입 클로저 터트리기
     // MARK: - 회원가입 Api - "POST"
-    static func signupWithObservable(userName: String, email: String, password: String) -> Observable<Result<UserResponse, ApiError>> {
+    static func signupWithObservable(userName: String, email: String, password: String) -> Observable<UserResponse> {
         
         let requestParams: [String:Any] = [
             "username":userName,
@@ -31,7 +32,7 @@ extension BeautistUserApi {
         let urlString: String = baseURL + "users"
         
         guard let url: URL = URL(string: urlString) else {
-            return Observable.just(.failure(.notAllowUrl))
+            return Observable.error(ApiError.notAllowUrl)
         }
         
         var urlRequest: URLRequest = URLRequest(url: url)
@@ -49,55 +50,46 @@ extension BeautistUserApi {
             urlRequest.httpBody = jsonData
         } catch {
             // JSON serialization failed
-            return Observable.just(.failure(.jsonEncodingError))
+            return Observable.error(ApiError.jsonEncodingError)
         }
         
         // MARK: - URLSession으로 API를 호출한다
         // MARK: - API호출에 대한 응답을 받는다
         // 만든URLRequest를 가지고 데이터 추출
         return URLSession.shared.rx.response(request: urlRequest)
-            .map({ (response: HTTPURLResponse, data: Data) -> Result<UserResponse, ApiError> in
+            .map({ (response: HTTPURLResponse, data: Data) -> UserResponse in
                 
-                // 에러가 있다면 에러 출력
-                // httpResponse 없다며 에러
-//                guard let httpResponse: HTTPURLResponse = response as? HTTPURLResponse else {
-//                    print("bad status code")
-//                    return .failure(ApiError.unKnown(nil))
-//                }
-                
-                // httpResponse 상태코드가 401 이라면 에러
                 switch response.statusCode {
                 case 401:
-                    return .failure(.unAuthorized)
+                    throw ApiError.unAuthorized
                 default:
                     print("default: \(response.statusCode)⭐️")
                 }
                 
                 if !(200...299).contains(response.statusCode) {
-                    return .failure(ApiError.badStatus(code: response.statusCode))
+                    throw ApiError.badStatus(code: response.statusCode)
                 }
                 
-                // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
                 // MARK: - 데이터파싱
                 do {
                     let response = try JSONDecoder().decode(UserResponse.self, from: data)
-                    return Result.success(response)
+                    return response
                     
                     // 파싱에 실패하면 에러
                 } catch {
-                    return Result.failure(.passingError)
+                    throw ApiError.passingError
                 }
                 
             })
         
     }
     
+    // ⭐️
     /// - Parameters:
     ///   - userName: 유저이름
     ///   - password: 유저패스워드
-    ///   - completion: 응답타입 클로저 터트리기
     // MARK: - 로그인하기 API - "GET"
-    static func loginWithObservable(userName: String, password: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
+    static func loginWithObservable(userName: String, password: String) -> Observable<UserResponse> {
         
         // MARK: - URLRequest를 만든다
         // https://parseapi.back4app.com/login?username=hertz315&password=%40%40Ghdrn315
@@ -108,7 +100,8 @@ extension BeautistUserApi {
         ]
         
         guard let url = urlComponents.url else {
-            return completion(.failure(.notAllowUrl))
+            // ⭐️에러보내고 스트림 끊킴⭐️
+            return Observable.error(ApiError.notAllowUrl)
         }
         
         
@@ -121,53 +114,44 @@ extension BeautistUserApi {
         urlRequest.addValue("1", forHTTPHeaderField: "X-Parse-Revocable-Session")
         
         // MARK: - URLSession으로 API를 호출한다
-        URLSession.shared.dataTask(with: urlRequest) { data, urlResponse, error in
-            
-            // 에러가 있다면 에러 출력
-            // httpResponse 없다며 에러
-            guard let httpResponse = urlResponse as? HTTPURLResponse else {
-                return completion(.failure(ApiError.unKnown(error)))
-            }
-            
-            // httpResponse 상태코드가 401 이라면 에러
-            switch httpResponse.statusCode {
-            case 401:
-                return completion(.failure(.unAuthorized))
-            default:
-                print("default: \(httpResponse.statusCode)⭐️")
-            }
-            
-            // httpResponse 상태코드가 200 ~ 299 사이가 아니라면 에러
-            if !(200...299).contains(httpResponse.statusCode) {
-                return completion(.failure(.badStatus(code: httpResponse.statusCode)))
-            }
-            
-            // 데이터 언래핑
-            if let jsonData = data {
-                // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
+        return URLSession.shared.rx.response(request: urlRequest)
+            .map({ (response: HTTPURLResponse, data: Data) -> UserResponse in
+                switch response.statusCode {
+                case 401:
+                    // 에러를 던지면 밖으로 나가기 때문에 리턴안해도 됨
+                    throw ApiError.unAuthorized
+                default:
+                    print("default: \(response.statusCode)⭐️")
+                }
+                
+                if !(200...299).contains(response.statusCode) {
+                    throw ApiError.badStatus(code: response.statusCode)
+                }
+                
+                // MARK: - 데이터파싱
                 do {
-                    let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
-                    let userLoginResponse = response
-                    completion(.success(userLoginResponse))
+                    let sucessResponse = try JSONDecoder().decode(UserResponse.self, from: data)
+                    return sucessResponse
                     
                     // 파싱에 실패하면 에러
                 } catch {
-                    completion(.failure(.passingError))
+                    throw ApiError.passingError
                 }
-            }
-            
-        }.resume()
+                
+            })
+        
         
         // 3. API 호출에대한 응답값을 받는다
         
         
     }
     
+    // ⭐️
     /// - Parameters:
     ///   - objectId: 유저객체ID
     ///   - completion: 응답타입 클로저 터트리기
     // MARK: - 특정 유저 검색하기 API "GET"
-    static func userRetrievingWithObservable(objectId: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
+    static func userRetrievingWithObservable(objectId: String) -> Observable<UserResponse> {
         
         // MARK: - URLRequest를 만든다
         // https://parseapi.back4app.com/users/ndDZyHxTVc
@@ -175,7 +159,7 @@ extension BeautistUserApi {
         let urlString = baseURL + "users/" + objectId
         
         guard let url = URL(string: urlString) else {
-            return completion(.failure(.notAllowUrl))
+            return Observable.error(ApiError.notAllowUrl)
         }
         
         // URLRequest 생성
@@ -186,46 +170,41 @@ extension BeautistUserApi {
         urlRequest.addValue("9EjhBUWG4G9aql4Q2GlTr9NqriQxbpaR2XCYQTSg", forHTTPHeaderField: "X-Parse-REST-API-Key")
         
         // MARK: - URLSession으로 API를 호출하기
-        URLSession.shared.dataTask(with: urlRequest) { data, urlResponse, error in
-            
-            // 에러가 있다면 에러 출력
-            // httpResponse 없다며 에러
-            // httpResponse.statusCode == 상태코드
-            guard let httpResponse = urlResponse as? HTTPURLResponse else {
-                return completion(.failure(ApiError.unKnown(error)))
-            }
-            
-            // httpResponse 상태코드가 401 이라면 에러
-            switch httpResponse.statusCode {
-            case 401:
-                return completion(.failure(.unAuthorized))
-            default:
-                print("default: \(httpResponse.statusCode)⭐️")
-            }
-            
-            // 데이터 언래핑
-            if let jsonData = data {
+        return URLSession.shared.rx.response(request: urlRequest)
+            .map({ (response: HTTPURLResponse, data: Data) -> UserResponse in
+                
+                // httpResponse 상태코드가 401 이라면 에러
+                switch response.statusCode {
+                case 401:
+                    throw ApiError.unAuthorized
+                default:
+                    print("default: \(response.statusCode)⭐️")
+                }
+                
                 // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
                 do {
-                    let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
-                    completion(.success(response))
-                    
+                    let response = try JSONDecoder().decode(UserResponse.self, from: data)
+                    return response
                     // 파싱에 실패하면 에러
                 } catch {
-                    completion(.failure(.passingError))
+                    throw ApiError.passingError
                 }
-            }
-            
-        }.resume()
+            })
+        
+        
+        
+        
+        
         
         
     }
     
+    // ⭐️
     /// - Parameters:
     ///   - sessionToken: 세션토큰
     ///   - completion: 응답타입 클로저 터트리기
     // MARK: - 현재 사용자 검색하기 Api "GET"
-    static func currentUserRetrievingWithObservable(sessionToken: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
+    static func currentUserRetrievingWithObservable(sessionToken: String) -> Observable<Result<UserResponse, ApiError>> {
         
         // MARK: - URLRequest를 만든다
         // https://parseapi.back4app.com/users/me
@@ -233,7 +212,7 @@ extension BeautistUserApi {
         let urlString = baseURL + "users/" + "me"
         
         guard let url = URL(string: urlString) else {
-            return completion(.failure(.notAllowUrl))
+            return Observable.just(Result.failure(.notAllowUrl))
         }
         
         // URLRequest 생성
@@ -245,44 +224,33 @@ extension BeautistUserApi {
         urlRequest.addValue(sessionToken, forHTTPHeaderField: "X-Parse-Session-Token")
         
         // MARK: - URLSession으로 API를 호출하기
-        URLSession.shared.dataTask(with: urlRequest) { data, urlResponse, error in
-            
-            // 에러가 있다면 에러 출력
-            // httpResponse 없다며 에러
-            // httpResponse.statusCode == 상태코드
-            guard let httpResponse = urlResponse as? HTTPURLResponse else {
-                return completion(.failure(ApiError.unKnown(error)))
-            }
-            
-            // httpResponse 상태코드가 401 이라면 에러
-            switch httpResponse.statusCode {
-            case 401:
-                return completion(.failure(.unAuthorized))
-            default:
-                print("default: \(httpResponse.statusCode)⭐️")
-            }
-            
-            // 데이터 언래핑
-            if let jsonData = data {
-                // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
-                do {
-                    let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
-                    completion(.success(response))
-                    // 파싱에 실패하면 에러
-                } catch {
-                    completion(.failure(.passingError))
+        return URLSession.shared.rx.response(request: urlRequest)
+            .map({ (response: HTTPURLResponse, data: Data) -> Result<UserResponse, ApiError> in
+                
+                switch response.statusCode {
+                case 401:
+                    return Result.failure(ApiError.unAuthorized)
+                default:
+                    print("default: \(response.statusCode)⭐️")
                 }
-            }
-            
-        }.resume()
-        
+                
+                // 데이터 언래핑
+                    do {
+                        let response = try JSONDecoder().decode(UserResponse.self, from: data)
+                        return Result.success(response)
+                        // 파싱에 실패하면 에러
+                    } catch {
+                        return Result.failure(ApiError.passingError)
+                    }
+                
+            })
+
     }
     
     /// - Parameters:
     ///   - sessionToken: 세션토큰
     ///   - userName: 수정할 유저닉네임
     ///   - email: 수정할 이메일
-    ///   - completion: 응답 클로저 터트리기
     // MARK: - 유저 정보 수정 Api "PUT
     static func editUserInformationWithObservable(sessionToken: String, objectId: String, userName: String, email: String, completion: @escaping ((Result<EditUser, ApiError>) -> Void)) {
         
@@ -564,22 +532,18 @@ extension BeautistUserApi {
     ///   - userName: 유저닉네임
     ///   - email: 유저이메일
     ///   - password: 유저페스워드
-    ///   - completion: 응답 클로저 터트리기
-    // MARK: - 회원가입하고 로그인하기
-    static func signupUserAndLoginUserWithObservable(userName: String, email: String, password: String,  completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
-        
-        self.signupAPI(userName: userName, email: email, password: password) { result in
-            
-            switch result {
-            case .success(let successResponse):
-                self.loginAPI(userName: userName, password: password) { response in
-                    completion(.success(successResponse))
-                }
-            case .failure(let failure):
-                completion(.failure(failure))
+    // MARK: - 회원가입하고 로그인하기 / 연쇄 API 호출⭐️
+    static func signupUserAndLoginUserWithObservable(userName: String, email: String, password: String) -> Observable<UserResponse> {
+        /// 회원가입이 성공하면 리턴 그후 오퍼레이터 사용하여 로그인 API 호출
+        /// flatMapLatest 사용하면 첫번째Api 호출 응답값의 결과가 인자로 들어온다
+        return self.signupWithObservable(userName: userName, email: email, password: password)
+            .flatMapLatest { (signupResponse: UserResponse) in
+                self.loginWithObservable(userName: userName,
+                                         password: password)
             }
-            
-        }
+            /// 회원가입 여부와 로그인 여부를 공유
+            .share(replay: 1)
+
     }
     
     
@@ -588,9 +552,9 @@ extension BeautistUserApi {
     ///   - sessionTokens: 삭제할 유저 토큰 배열
     ///   - ObjectIds: 삭제할 유저 Id 배열
     ///   - completion: 삭제가 완료된 아이디
-    // MARK: - 유저 동시 삭제
+    // MARK: - 유저 동시 삭제 / 동시 API 호출⭐️
     static func deleteSelectedUsersWithObservable(deleteUserTokenAndIdDictionary: [String:String],
-                                       completion: @escaping ([String:String]) -> Void) {
+                                                  completion: @escaping ([String:String]) -> Void) {
         
         
         // Create a dispatch group
@@ -608,9 +572,9 @@ extension BeautistUserApi {
             self.deleteUserAPI(sessionToken: keyTokenValueId.key, objectId: keyTokenValueId.value) { result in
                 switch result {
                 case .success(_):
-//
-//                    guard let userId = response.objectID else { return }
-//                    guard let tokenId = response.sessionToken else { return }
+                    //
+                    //                    guard let userId = response.objectID else { return }
+                    //                    guard let tokenId = response.sessionToken else { return }
                     
                     // 삭제된 토큰과 아이디를 삭제된 토큰, 아이디 배열에 넣어주기
                     deletedUserInformationDictionary.updateValue(keyTokenValueId.value, forKey: keyTokenValueId.key)
@@ -631,7 +595,7 @@ extension BeautistUserApi {
             print("모든 유저 삭제됨")
             completion(deletedUserInformationDictionary)
         }
-
+        
         
         
     }
