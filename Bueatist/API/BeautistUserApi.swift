@@ -397,6 +397,8 @@ enum BeautistUserApi {
     // MARK: - 유저 삭제하기 Api "DELETE"
     static func deleteUserAPI(sessionToken: String, objectId: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
         
+        print(#fileID, #function, #line, "deleteUserAPI 호출됨⭐️")
+        
         // MARK: - URLRequest를 만든다
         // https://parseapi.back4app.com/users/a9JbehvWhv
         // baseURL = https://parseapi.back4app.com/
@@ -615,5 +617,57 @@ enum BeautistUserApi {
     }
     
     
+    //sessionToken: String, objectId: String
+    /// - Parameters:
+    ///   - sessionTokens: 삭제할 유저 토큰 배열
+    ///   - ObjectIds: 삭제할 유저 Id 배열
+    ///   - completion: 삭제가 완료된 아이디
+    // MARK: - 유저 동시 삭제
+    static func deleteSelectedUsersAPI(deleteUserTokenAndIdDictionary: [String:String],
+                                       completion: @escaping ([String:String]) -> Void) {
+        
+        
+        // Create a dispatch group
+        let group = DispatchGroup()
+        
+        // 성공적으로 삭제가 된 유저들
+        var deletedUserInformationDictionary: [String:String] = [:]
+        
+        deleteUserTokenAndIdDictionary.forEach { keyTokenValueId in
+            
+            
+            // 디스패치 그룹에 넣음⭐️
+            group.enter()
+            
+            self.deleteUserAPI(sessionToken: keyTokenValueId.key, objectId: keyTokenValueId.value) { result in
+                switch result {
+                case .success(_):
+//
+//                    guard let userId = response.objectID else { return }
+//                    guard let tokenId = response.sessionToken else { return }
+                    
+                    // 삭제된 토큰과 아이디를 삭제된 토큰, 아이디 배열에 넣어주기
+                    deletedUserInformationDictionary.updateValue(keyTokenValueId.value, forKey: keyTokenValueId.key)
+                    
+                case .failure(let failure):
+                    print("inner deleteUserAPI - failure: \(failure)")
+                    
+                }
+                
+                group.leave()
+                
+            }// 단일 삭제 api 호출
+        }
+        
+        // Configure a completion callback
+        group.notify(queue: .main) {
+            // All requests completed
+            print("모든 유저 삭제됨")
+            completion(deletedUserInformationDictionary)
+        }
+
+        
+        
+    }
     
 }

@@ -126,6 +126,17 @@ class BueatistViewModel: ObservableObject {
 //        }
         
         
+//        // MARK: - 클로저 기반 동시 API 처리
+//        BeautistUserApi.deleteSelectedUsersAPI(
+//            deleteUserTokenAndIdDictionary: [
+//                "r:2af6562fbfbfa6212edd66466de146a1":"rt5mGHxOwZ",
+//                "r:6d2326a96187862f8b7bd2d622981eba":"Oem1TxoKxk",
+//            ]) { deletedDictionary in
+//            print(deletedDictionary.keys)
+//            print(deletedDictionary.values)
+//        }
+        
+        
     }// init종료지점
     
     // MARK: - API 에러처리
