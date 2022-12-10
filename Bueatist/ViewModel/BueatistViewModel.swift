@@ -13,7 +13,7 @@ class BueatistViewModel: ObservableObject {
     // MARK: - 뷰모델 생성 init
     init() {
         
-        print(#fileID, #function, #line, "⭐️뷰모델 생성")
+//        print(#fileID, #function, #line, "⭐️뷰모델 생성")
         
 //        강한 참조 조심
 //        BeautistUserApi.loginAPI(userName: "honghaha1996", password: "@@Ghdrn315") { [weak self] result in

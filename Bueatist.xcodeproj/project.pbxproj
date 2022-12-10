@@ -13,11 +13,16 @@
 		E0473F7F29425F8E008C8F80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0473F7E29425F8E008C8F80 /* Assets.xcassets */; };
 		E0473F8229425F8E008C8F80 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0473F8129425F8E008C8F80 /* Preview Assets.xcassets */; };
 		E0473F8929426774008C8F80 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473F8829426774008C8F80 /* AppDelegate.swift */; };
-		E0473F8C29433071008C8F80 /* BeautistUserApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473F8B29433071008C8F80 /* BeautistUserApi.swift */; };
+		E0473F8C29433071008C8F80 /* BeautistUserApi+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473F8B29433071008C8F80 /* BeautistUserApi+Rx.swift */; };
 		E0473F8F294334BF008C8F80 /* BueatistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473F8E294334BF008C8F80 /* BueatistViewModel.swift */; };
 		E0473F92294337F3008C8F80 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473F91294337F3008C8F80 /* UserResponse.swift */; };
 		E0473F9529436962008C8F80 /* URL + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473F9429436962008C8F80 /* URL + Ext.swift */; };
 		E0473F9829436FDB008C8F80 /* MultipartForm in Frameworks */ = {isa = PBXBuildFile; productRef = E0473F9729436FDB008C8F80 /* MultipartForm */; };
+		E0473F9F2944A8E4008C8F80 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = E0473F9E2944A8E4008C8F80 /* RxCocoa */; };
+		E0473FA12944A8E4008C8F80 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = E0473FA02944A8E4008C8F80 /* RxRelay */; };
+		E0473FA32944A8E4008C8F80 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E0473FA22944A8E4008C8F80 /* RxSwift */; };
+		E0473FA52944A93A008C8F80 /* BeautistUserApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473FA42944A93A008C8F80 /* BeautistUserApi.swift */; };
+		E0473FA72944B21F008C8F80 /* BeautistViewModel+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473FA62944B21F008C8F80 /* BeautistViewModel+Rx.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,10 +35,12 @@
 		E0473F7E29425F8E008C8F80 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E0473F8129425F8E008C8F80 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E0473F8829426774008C8F80 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E0473F8B29433071008C8F80 /* BeautistUserApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeautistUserApi.swift; sourceTree = "<group>"; };
+		E0473F8B29433071008C8F80 /* BeautistUserApi+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BeautistUserApi+Rx.swift"; sourceTree = "<group>"; };
 		E0473F8E294334BF008C8F80 /* BueatistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BueatistViewModel.swift; sourceTree = "<group>"; };
 		E0473F91294337F3008C8F80 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
 		E0473F9429436962008C8F80 /* URL + Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL + Ext.swift"; sourceTree = "<group>"; };
+		E0473FA42944A93A008C8F80 /* BeautistUserApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeautistUserApi.swift; sourceTree = "<group>"; };
+		E0473FA62944B21F008C8F80 /* BeautistViewModel+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BeautistViewModel+Rx.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,7 +48,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0473F9F2944A8E4008C8F80 /* RxCocoa in Frameworks */,
 				5B198815B7D903B47A4051B2 /* Pods_Bueatist.framework in Frameworks */,
+				E0473FA32944A8E4008C8F80 /* RxSwift in Frameworks */,
+				E0473FA12944A8E4008C8F80 /* RxRelay in Frameworks */,
 				E0473F9829436FDB008C8F80 /* MultipartForm in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -103,7 +113,8 @@
 		E0473F8A29433058008C8F80 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				E0473F8B29433071008C8F80 /* BeautistUserApi.swift */,
+				E0473F8B29433071008C8F80 /* BeautistUserApi+Rx.swift */,
+				E0473FA42944A93A008C8F80 /* BeautistUserApi.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -112,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				E0473F8E294334BF008C8F80 /* BueatistViewModel.swift */,
+				E0473FA62944B21F008C8F80 /* BeautistViewModel+Rx.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -160,6 +172,9 @@
 			name = Bueatist;
 			packageProductDependencies = (
 				E0473F9729436FDB008C8F80 /* MultipartForm */,
+				E0473F9E2944A8E4008C8F80 /* RxCocoa */,
+				E0473FA02944A8E4008C8F80 /* RxRelay */,
+				E0473FA22944A8E4008C8F80 /* RxSwift */,
 			);
 			productName = Bueatist;
 			productReference = E0473F7729425F8D008C8F80 /* Bueatist.app */;
@@ -191,6 +206,7 @@
 			mainGroup = E0473F6E29425F8D008C8F80;
 			packageReferences = (
 				E0473F9629436FDB008C8F80 /* XCRemoteSwiftPackageReference "MultipartForm" */,
+				E0473F9D2944A8E4008C8F80 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			productRefGroup = E0473F7829425F8D008C8F80 /* Products */;
 			projectDirPath = "";
@@ -261,12 +277,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0473F8929426774008C8F80 /* AppDelegate.swift in Sources */,
+				E0473FA72944B21F008C8F80 /* BeautistViewModel+Rx.swift in Sources */,
 				E0473F92294337F3008C8F80 /* UserResponse.swift in Sources */,
+				E0473FA52944A93A008C8F80 /* BeautistUserApi.swift in Sources */,
 				E0473F8F294334BF008C8F80 /* BueatistViewModel.swift in Sources */,
 				E0473F7D29425F8D008C8F80 /* ContentView.swift in Sources */,
 				E0473F7B29425F8D008C8F80 /* BeautistApp.swift in Sources */,
 				E0473F9529436962008C8F80 /* URL + Ext.swift in Sources */,
-				E0473F8C29433071008C8F80 /* BeautistUserApi.swift in Sources */,
+				E0473F8C29433071008C8F80 /* BeautistUserApi+Rx.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -479,6 +497,14 @@
 				minimumVersion = 0.1.0;
 			};
 		};
+		E0473F9D2944A8E4008C8F80 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -486,6 +512,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E0473F9629436FDB008C8F80 /* XCRemoteSwiftPackageReference "MultipartForm" */;
 			productName = MultipartForm;
+		};
+		E0473F9E2944A8E4008C8F80 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0473F9D2944A8E4008C8F80 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		E0473FA02944A8E4008C8F80 /* RxRelay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0473F9D2944A8E4008C8F80 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxRelay;
+		};
+		E0473FA22944A8E4008C8F80 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0473F9D2944A8E4008C8F80 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -1,55 +1,17 @@
 //
-//  BeautistUserApi+Rx.swift
+//  BueatistAPI.swift
 //  Bueatist
 //
-//  Created by Hertz on 12/10/22.
+//  Created by Hertz on 12/9/22.
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
 
-enum BeautistUserApi {
+extension BeautistUserApi {
     
-    // 전처리 컴파일 되기 전에 실행된다
-    // MARK: - 전처리
-#if DEBUG // 디버그
-    static let baseURL = "https://parseapi.back4app.com/"
-#else // 릴리즈
-    static let baseURL = "https://parseapi.back4app.com/"
-#endif
-    
-    /// API에러타입 정의
-    // MARK: - API에러타입 정의
-    enum ApiError: Error {
-        case passingError
-        case noContent
-        case notAllowUrl
-        case unAuthorized
-        case jsonEncodingError
-        case unKnown(_ error: Error?)
-        case badStatus(code: Int)
-        
-        
-        // 에러타입 설명 String
-        var info: String {
-            switch self {
-            case .passingError:
-                return "파싱에러입니다"
-            case .noContent:
-                return "컨텐츠가 없는 에러입니다"
-            case .unAuthorized:
-                return "인증되지 않은 사용자 입니다"
-            case .unKnown(let error):
-                return "알수 없는 에러 입니다: \(String(describing: error))"
-            case .badStatus(code: let code):
-                return "상태코드 에러입니다 에러 상태코드 : \(code)"
-            case .notAllowUrl:
-                return "올바른 url이 아닙니다"
-            case .jsonEncodingError:
-                return "유효한 Json형식이 아닙니다"
-            }
-        }
-        
-    }
+
     
     /// - Parameters:
     ///   - userName: 유저닉네임
@@ -57,7 +19,7 @@ enum BeautistUserApi {
     ///   - password: 유저패스워드
     ///   - completion: 응답타입 클로저 터트리기
     // MARK: - 회원가입 Api - "POST"
-    static func signupAPI(userName: String, email: String, password: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
+    static func signupWithObservable(userName: String, email: String, password: String) -> Observable<Result<UserResponse, ApiError>> {
         
         let requestParams: [String:Any] = [
             "username":userName,
@@ -69,7 +31,7 @@ enum BeautistUserApi {
         let urlString: String = baseURL + "users"
         
         guard let url: URL = URL(string: urlString) else {
-            return completion(.failure(.notAllowUrl))
+            return Observable.just(.failure(.notAllowUrl))
         }
         
         var urlRequest: URLRequest = URLRequest(url: url)
@@ -87,43 +49,46 @@ enum BeautistUserApi {
             urlRequest.httpBody = jsonData
         } catch {
             // JSON serialization failed
-            return completion(.failure(.jsonEncodingError))
+            return Observable.just(.failure(.jsonEncodingError))
         }
         
         // MARK: - URLSession으로 API를 호출한다
         // MARK: - API호출에 대한 응답을 받는다
         // 만든URLRequest를 가지고 데이터 추출
-        URLSession.shared.dataTask(with: urlRequest) { data, urlResponse, error in
-            
-            // 에러가 있다면 에러 출력
-            // httpResponse 없다며 에러
-            guard let httpResponse: HTTPURLResponse = urlResponse as? HTTPURLResponse else {
-                return completion(.failure(ApiError.unKnown(error)))
-            }
-            
-            // httpResponse 상태코드가 401 이라면 에러
-            switch httpResponse.statusCode {
-            case 401:
-                return completion(.failure(.unAuthorized))
-            default:
-                print("default: \(httpResponse.statusCode)⭐️")
-            }
-            
-            // 데이터 언래핑
-            if let jsonData: Data = data {
+        return URLSession.shared.rx.response(request: urlRequest)
+            .map({ (response: HTTPURLResponse, data: Data) -> Result<UserResponse, ApiError> in
+                
+                // 에러가 있다면 에러 출력
+                // httpResponse 없다며 에러
+//                guard let httpResponse: HTTPURLResponse = response as? HTTPURLResponse else {
+//                    print("bad status code")
+//                    return .failure(ApiError.unKnown(nil))
+//                }
+                
+                // httpResponse 상태코드가 401 이라면 에러
+                switch response.statusCode {
+                case 401:
+                    return .failure(.unAuthorized)
+                default:
+                    print("default: \(response.statusCode)⭐️")
+                }
+                
+                if !(200...299).contains(response.statusCode) {
+                    return .failure(ApiError.badStatus(code: response.statusCode))
+                }
+                
                 // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
                 // MARK: - 데이터파싱
                 do {
-                    let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
-                    completion(.success(response))
+                    let response = try JSONDecoder().decode(UserResponse.self, from: data)
+                    return Result.success(response)
                     
                     // 파싱에 실패하면 에러
                 } catch {
-                    completion(.failure(.passingError))
+                    return Result.failure(.passingError)
                 }
-            }
-            
-        }.resume()
+                
+            })
         
     }
     
@@ -132,7 +97,7 @@ enum BeautistUserApi {
     ///   - password: 유저패스워드
     ///   - completion: 응답타입 클로저 터트리기
     // MARK: - 로그인하기 API - "GET"
-    static func loginAPI(userName: String, password: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
+    static func loginWithObservable(userName: String, password: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
         
         // MARK: - URLRequest를 만든다
         // https://parseapi.back4app.com/login?username=hertz315&password=%40%40Ghdrn315
@@ -202,7 +167,7 @@ enum BeautistUserApi {
     ///   - objectId: 유저객체ID
     ///   - completion: 응답타입 클로저 터트리기
     // MARK: - 특정 유저 검색하기 API "GET"
-    static func userRetrievingAPI(objectId: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
+    static func userRetrievingWithObservable(objectId: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
         
         // MARK: - URLRequest를 만든다
         // https://parseapi.back4app.com/users/ndDZyHxTVc
@@ -260,7 +225,7 @@ enum BeautistUserApi {
     ///   - sessionToken: 세션토큰
     ///   - completion: 응답타입 클로저 터트리기
     // MARK: - 현재 사용자 검색하기 Api "GET"
-    static func currentUserRetrievingAPI(sessionToken: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
+    static func currentUserRetrievingWithObservable(sessionToken: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
         
         // MARK: - URLRequest를 만든다
         // https://parseapi.back4app.com/users/me
@@ -319,7 +284,7 @@ enum BeautistUserApi {
     ///   - email: 수정할 이메일
     ///   - completion: 응답 클로저 터트리기
     // MARK: - 유저 정보 수정 Api "PUT
-    static func editUserInformationAPI(sessionToken: String, objectId: String, userName: String, email: String, completion: @escaping ((Result<EditUser, ApiError>) -> Void)) {
+    static func editUserInformationWithObservable(sessionToken: String, objectId: String, userName: String, email: String, completion: @escaping ((Result<EditUser, ApiError>) -> Void)) {
         
         // MARK: - URLRequest를 만든다
         // https://parseapi.back4app.com/users/jSSAQpjmWC
@@ -396,7 +361,7 @@ enum BeautistUserApi {
     ///   - objectId: 유저 아이디
     ///   - completion: 응답 클로저 터트리기
     // MARK: - 유저 삭제하기 Api "DELETE"
-    static func deleteUserAPI(sessionToken: String, objectId: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
+    static func deleteUserWithObservable(sessionToken: String, objectId: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
         
         print(#fileID, #function, #line, "deleteUserAPI 호출됨⭐️")
         
@@ -455,7 +420,7 @@ enum BeautistUserApi {
     ///   - email: 유저이메일
     ///   - completion: http응답 클로저 터트리기
     // MARK: - 확인이메일요청 Api "POST"
-    static func verificationEmailRequestAPI(email: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
+    static func verificationEmailRequestWithObservable(email: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
         
         let requestParams: [String:Any] = [
             "email":email,
@@ -527,7 +492,7 @@ enum BeautistUserApi {
     ///   - email: 유저이메일
     ///   - completion: http응답 클로저 터트리기
     // MARK: - 확인이메일요청 Api "POST"
-    static func requestPasswordResetAPI(email: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
+    static func requestPasswordResetWithObservable(email: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
         
         let requestParams: [String:Any] = [
             "email":email,
@@ -601,7 +566,7 @@ enum BeautistUserApi {
     ///   - password: 유저페스워드
     ///   - completion: 응답 클로저 터트리기
     // MARK: - 회원가입하고 로그인하기
-    static func signupUserAndLoginUserAPI(userName: String, email: String, password: String,  completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
+    static func signupUserAndLoginUserWithObservable(userName: String, email: String, password: String,  completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
         
         self.signupAPI(userName: userName, email: email, password: password) { result in
             
@@ -624,7 +589,7 @@ enum BeautistUserApi {
     ///   - ObjectIds: 삭제할 유저 Id 배열
     ///   - completion: 삭제가 완료된 아이디
     // MARK: - 유저 동시 삭제
-    static func deleteSelectedUsersAPI(deleteUserTokenAndIdDictionary: [String:String],
+    static func deleteSelectedUsersWithObservable(deleteUserTokenAndIdDictionary: [String:String],
                                        completion: @escaping ([String:String]) -> Void) {
         
         

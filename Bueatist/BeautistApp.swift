@@ -11,6 +11,7 @@ import SwiftUI
 struct BeautistApp: App {
     
     @StateObject var beautistVM = BueatistViewModel()
+    @StateObject var beautistRxVM = BeautistViewModelRx()
     
     var body: some Scene {
         WindowGroup {
