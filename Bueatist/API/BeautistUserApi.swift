@@ -11,12 +11,12 @@ enum BeautistUserApi {
     
     // 전처리 컴파일 되기 전에 실행된다
     // MARK: - 전처리
-    #if DEBUG // 디버그
+#if DEBUG // 디버그
     static private let baseURL = "https://parseapi.back4app.com/"
-    #else // 릴리즈
+#else // 릴리즈
     static private let baseURL = "https://parseapi.back4app.com/"
-    #endif
-
+#endif
+    
     /// API에러타입 정의
     // MARK: - API에러타입 정의
     enum ApiError: Error {
@@ -85,7 +85,7 @@ enum BeautistUserApi {
             // JSON형태로 만든 데이터를 httpBody에 넣기
             urlRequest.httpBody = jsonData
         } catch {
-                // JSON serialization failed
+            // JSON serialization failed
             return completion(.failure(.jsonEncodingError))
         }
         
@@ -110,16 +110,16 @@ enum BeautistUserApi {
             
             // 데이터 언래핑
             if let jsonData: Data = data {
-              // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
-              // MARK: - 데이터파싱
-              do {
-                let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
-                  completion(.success(response))
-                  
-                  // 파싱에 실패하면 에러
-              } catch {
-                  completion(.failure(.passingError))
-              }
+                // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
+                // MARK: - 데이터파싱
+                do {
+                    let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
+                    completion(.success(response))
+                    
+                    // 파싱에 실패하면 에러
+                } catch {
+                    completion(.failure(.passingError))
+                }
             }
             
         }.resume()
@@ -178,16 +178,16 @@ enum BeautistUserApi {
             
             // 데이터 언래핑
             if let jsonData = data {
-              // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
-              do {
-                let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
-                let userLoginResponse = response
-                  completion(.success(userLoginResponse))
-                  
-                  // 파싱에 실패하면 에러
-              } catch {
-                  completion(.failure(.passingError))
-              }
+                // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
+                do {
+                    let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
+                    let userLoginResponse = response
+                    completion(.success(userLoginResponse))
+                    
+                    // 파싱에 실패하면 에러
+                } catch {
+                    completion(.failure(.passingError))
+                }
             }
             
         }.resume()
@@ -239,15 +239,15 @@ enum BeautistUserApi {
             
             // 데이터 언래핑
             if let jsonData = data {
-              // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
-              do {
-                let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
-                  completion(.success(response))
-                  
-                  // 파싱에 실패하면 에러
-              } catch {
-                  completion(.failure(.passingError))
-              }
+                // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
+                do {
+                    let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
+                    completion(.success(response))
+                    
+                    // 파싱에 실패하면 에러
+                } catch {
+                    completion(.failure(.passingError))
+                }
             }
             
         }.resume()
@@ -298,14 +298,14 @@ enum BeautistUserApi {
             
             // 데이터 언래핑
             if let jsonData = data {
-              // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
-              do {
-                let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
-                  completion(.success(response))
-                  // 파싱에 실패하면 에러
-              } catch {
-                  completion(.failure(.passingError))
-              }
+                // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
+                do {
+                    let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
+                    completion(.success(response))
+                    // 파싱에 실패하면 에러
+                } catch {
+                    completion(.failure(.passingError))
+                }
             }
             
         }.resume()
@@ -348,10 +348,10 @@ enum BeautistUserApi {
             // JSON형태로 만든 데이터를 httpBody에 넣기
             urlRequest.httpBody = jsonData
         } catch {
-                // JSON serialization failed
+            // JSON serialization failed
             return completion(.failure(.jsonEncodingError))
         }
-
+        
         // MARK: - URLSession으로 API를 호출한다 && API호출에 대한 응답을 받는다
         // 만든URLRequest를 가지고 데이터 추출
         URLSession.shared.dataTask(with: urlRequest) { data, urlResponse, error in
@@ -372,15 +372,15 @@ enum BeautistUserApi {
             
             // 데이터 언래핑
             if let jsonData: Data = data {
-              // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
-              // MARK: - 데이터파싱
-              do {
-                let response = try JSONDecoder().decode(EditUser.self, from: jsonData)
-                  completion(.success(response))
-                  // 파싱에 실패하면 에러
-              } catch {
-                  completion(.failure(.passingError))
-              }
+                // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
+                // MARK: - 데이터파싱
+                do {
+                    let response = try JSONDecoder().decode(EditUser.self, from: jsonData)
+                    completion(.success(response))
+                    // 파싱에 실패하면 에러
+                } catch {
+                    completion(.failure(.passingError))
+                }
             }
             
         }.resume()
@@ -434,15 +434,15 @@ enum BeautistUserApi {
             
             // 데이터 언래핑
             if let jsonData: Data = data {
-              // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
-              // MARK: - 데이터파싱
-              do {
-                let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
-                  completion(.success(response))
-                  // 파싱에 실패하면 에러
-              } catch {
-                  completion(.failure(.passingError))
-              }
+                // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
+                // MARK: - 데이터파싱
+                do {
+                    let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
+                    completion(.success(response))
+                    // 파싱에 실패하면 에러
+                } catch {
+                    completion(.failure(.passingError))
+                }
             }
             
         }.resume()
@@ -481,7 +481,7 @@ enum BeautistUserApi {
             // JSON형태로 만든 데이터를 httpBody에 넣기
             urlRequest.httpBody = jsonData
         } catch {
-                // JSON serialization failed
+            // JSON serialization failed
             return completion(.failure(.jsonEncodingError))
         }
         
@@ -506,20 +506,20 @@ enum BeautistUserApi {
             
             // 데이터 언래핑
             if let jsonData: Data = data {
-              // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
-              // MARK: - 데이터파싱
-              do {
-                let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
-                  completion(.success(response))
-                  // 파싱에 실패하면 에러
-              } catch {
-                  completion(.failure(.passingError))
-              }
+                // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
+                // MARK: - 데이터파싱
+                do {
+                    let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
+                    completion(.success(response))
+                    // 파싱에 실패하면 에러
+                } catch {
+                    completion(.failure(.passingError))
+                }
             }
             
         }.resume()
     }
-
+    
     /// - Parameters:
     ///   - email: 유저이메일
     ///   - completion: http응답 클로저 터트리기
@@ -553,7 +553,7 @@ enum BeautistUserApi {
             // JSON형태로 만든 데이터를 httpBody에 넣기
             urlRequest.httpBody = jsonData
         } catch {
-                // JSON serialization failed
+            // JSON serialization failed
             return completion(.failure(.jsonEncodingError))
         }
         
@@ -578,18 +578,42 @@ enum BeautistUserApi {
             
             // 데이터 언래핑
             if let jsonData: Data = data {
-              // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
-              // MARK: - 데이터파싱
-              do {
-                let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
-                  completion(.success(response))
-                  // 파싱에 실패하면 에러
-              } catch {
-                  completion(.failure(.passingError))
-              }
+                // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
+                // MARK: - 데이터파싱
+                do {
+                    let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
+                    completion(.success(response))
+                    // 파싱에 실패하면 에러
+                } catch {
+                    completion(.failure(.passingError))
+                }
             }
             
         }.resume()
     }
+    
+    /// - Parameters:
+    ///   - userName: 유저닉네임
+    ///   - email: 유저이메일
+    ///   - password: 유저페스워드
+    ///   - completion: 응답 클로저 터트리기
+    // MARK: - 회원가입하고 로그인하기
+    static func signupUserAndLoginUserAPI(userName: String, email: String, password: String,  completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
+        
+        self.signupAPI(userName: userName, email: email, password: password) { result in
+            
+            switch result {
+            case .success(let successResponse):
+                self.loginAPI(userName: userName, password: password) { response in
+                    completion(.success(successResponse))
+                }
+            case .failure(let failure):
+                completion(.failure(failure))
+            }
+            
+        }
+    }
+    
+    
     
 }
