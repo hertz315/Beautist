@@ -19,6 +19,22 @@ class BeautistViewModelRx: ObservableObject {
         
         print(#fileID, #function, #line, "⭐️Rx뷰모델 생성")
         
+        // MARK: - 성공⭐️
+        BeautistUserApi.deleteSelectedUsersWithObservable(deleteUserTokenAndIdDictionary: [
+            "r:6211b32d7fce8773c1a0a3bf734f4849":"xHoCGthFKy",
+            "r:206019bbf7e1fbd75530af3c397fea5e":"NaHzZWyS6u",
+            "r:a87e5fa398cd27a0c0fbc36446d5a67e":"jXdTJPDvdn",
+            "r:a989882e5fa93ef859ccc097fcfb0766":"zNjJNxlTdn"
+        ])
+        .subscribe(onNext: { deleteUser in
+            print("vm / deleteSelectedUsersWithObservable⭐️ : \(deleteUser)")
+        }, onError: { error in
+            print("vm / deleteSelectedUsersWithObservable❗️ : \(error)")
+        })
+        .disposed(by: disposeBag)
+        
+        
+        // MARK: - 성공⭐️
         BeautistUserApi.signupUserAndLoginUserWithObservable(userName: "hertz1988", email: "hertz1988@gmail.com", password: "hertz1988")
             .observe(on: MainScheduler.instance) // 메인 쓰레드에서 값 받음
             .subscribe(onNext: { response in
@@ -29,51 +45,51 @@ class BeautistViewModelRx: ObservableObject {
             .disposed(by: disposeBag)
         
         // MARK: - 성공⭐️
-//        BeautistUserApi.signupWithObservable(userName: "hertz1020", email: "hertz1020@gmail.com",password: "hertz1020")
-//            .observe(on: MainScheduler.instance) // 메인 쓰레드에서 값 받음
-//            .subscribe(onNext: { response in
-//                print("vm: signupWithObservable / \(response)")
-//            }, onError: { error in
-//                self.handleError(error)
-//            })// 옵저버블 구독
-//            .disposed(by: disposeBag)
+        BeautistUserApi.signupWithObservable(userName: "hertz1020", email: "hertz1020@gmail.com",password: "hertz1020")
+            .observe(on: MainScheduler.instance) // 메인 쓰레드에서 값 받음
+            .subscribe(onNext: { response in
+                print("vm: signupWithObservable / \(response)")
+            }, onError: { error in
+                self.handleError(error)
+            })// 옵저버블 구독
+            .disposed(by: disposeBag)
         
         // MARK: - 성공⭐️
-        //        BeautistUserApi.loginWithObservable(userName: "hertz1020", password: "hertz1020")
-        //            .observe(on: MainScheduler.instance)
-        //            .compactMap {$0}
-        //            .subscribe(
-        //                onNext: { (response: UserResponse) in
-        //                print("VM / loginWithObservable: \(response)")
-        //            }, onError: { [weak self] error in
-        //                guard let self = self else {return}
-        //                self.handleError(error)
-        //            })
-        //            .disposed(by: disposeBag)
+        BeautistUserApi.loginWithObservable(userName: "hertz1020", password: "hertz1020")
+            .observe(on: MainScheduler.instance)
+            .compactMap {$0}
+            .subscribe(
+                onNext: { (response: UserResponse) in
+                    print("VM / loginWithObservable: \(response)")
+                }, onError: { [weak self] error in
+                    guard let self = self else {return}
+                    self.handleError(error)
+                })
+            .disposed(by: disposeBag)
         
         // MARK: - 성공⭐️
-        //        BeautistUserApi.userRetrievingWithObservable(objectId: "CQcoXNqpsl")
-        //            .observe(on: MainScheduler.instance)
-        //            .subscribe(onNext: { (response: UserResponse) in
-        //                print("VM / userRetrievingWithObservable / : \(response)")
-        //            }, onError: { error in
-        //                self.handleError(error)
-        //            })
-        //            .disposed(by: disposeBag)
+        BeautistUserApi.userRetrievingWithObservable(objectId: "CQcoXNqpsl")
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { (response: UserResponse) in
+                print("VM / userRetrievingWithObservable / : \(response)")
+            }, onError: { error in
+                self.handleError(error)
+            })
+            .disposed(by: disposeBag)
         
-        //        // MARK: - 성공⭐️
-        //        BeautistUserApi.currentUserRetrievingWithObservable(sessionToken: "r:e7e8207142da4c4ef4945ec5daa2aa2d")
-        //            .observe(on: MainScheduler.instance)
-        //            .subscribe(onNext: { response in
-        //                switch response {
-        //                case .success(let sucessData):
-        //                    print("singupWithObservable: \(sucessData)")
-        //                case .failure(let failure):
-        //                    self.handleError(failure)
-        //                }
-        //
-        //            })
-        //            .disposed(by: disposeBag)
+        // MARK: - 성공⭐️
+        BeautistUserApi.currentUserRetrievingWithObservable(sessionToken: "r:e7e8207142da4c4ef4945ec5daa2aa2d")
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { response in
+                switch response {
+                case .success(let sucessData):
+                    print("singupWithObservable: \(sucessData)")
+                case .failure(let failure):
+                    self.handleError(failure)
+                }
+                
+            })
+            .disposed(by: disposeBag)
         
         
     }// init종료지점

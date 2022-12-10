@@ -235,16 +235,16 @@ extension BeautistUserApi {
                 }
                 
                 // 데이터 언래핑
-                    do {
-                        let response = try JSONDecoder().decode(UserResponse.self, from: data)
-                        return Result.success(response)
-                        // 파싱에 실패하면 에러
-                    } catch {
-                        return Result.failure(ApiError.passingError)
-                    }
+                do {
+                    let response = try JSONDecoder().decode(UserResponse.self, from: data)
+                    return Result.success(response)
+                    // 파싱에 실패하면 에러
+                } catch {
+                    return Result.failure(ApiError.passingError)
+                }
                 
             })
-
+        
     }
     
     /// - Parameters:
@@ -324,12 +324,13 @@ extension BeautistUserApi {
         
     }
     
+    // ⭐️
     /// - Parameters:
     ///   - sessionToken: 유저 세션토큰
     ///   - objectId: 유저 아이디
     ///   - completion: 응답 클로저 터트리기
     // MARK: - 유저 삭제하기 Api "DELETE"
-    static func deleteUserWithObservable(sessionToken: String, objectId: String, completion: @escaping ((Result<UserResponse, ApiError>) -> Void)) {
+    static func deleteUserWithObservable(sessionToken: String, objectId: String) -> Observable<UserResponse> {
         
         print(#fileID, #function, #line, "deleteUserAPI 호출됨⭐️")
         
@@ -338,9 +339,8 @@ extension BeautistUserApi {
         // baseURL = https://parseapi.back4app.com/
         let urlString = baseURL + "users/" + objectId
         
-        
         guard let url: URL = URL(string: urlString) else {
-            return completion(.failure(.notAllowUrl))
+            return Observable.error(ApiError.notAllowUrl)
         }
         
         var urlRequest: URLRequest = URLRequest(url: url)
@@ -352,36 +352,32 @@ extension BeautistUserApi {
         
         // MARK: - URLSession으로 API를 호출한다 && API호출에 대한 응답을 받는다
         // 만든URLRequest를 가지고 데이터 추출
-        URLSession.shared.dataTask(with: urlRequest) { data, urlResponse, error in
-            
-            // 에러가 있다면 에러 출력
-            // httpResponse 없다며 에러
-            guard let httpResponse: HTTPURLResponse = urlResponse as? HTTPURLResponse else {
-                return completion(.failure(ApiError.unKnown(error)))
-            }
-            
-            // httpResponse 상태코드가 401 이라면 에러
-            switch httpResponse.statusCode {
-            case 401:
-                return completion(.failure(.unAuthorized))
-            default:
-                print("default: \(httpResponse.statusCode)⭐️")
-            }
-            
-            // 데이터 언래핑
-            if let jsonData: Data = data {
-                // JSON -> Struct 디코딩 하고 있는작업 == 데이터 파싱⭐️
+        return URLSession.shared.rx.response(request: urlRequest)
+            .map({ (response: HTTPURLResponse, data: Data) in
+                
+                switch response.statusCode {
+                case 401:
+                    throw ApiError.unAuthorized
+                default:
+                    print("default: \(response.statusCode)⭐️")
+                }
+                
+                // 응답코드가 200...299가 아니라면 에러던지기
+                if !(200...299).contains(response.statusCode) {
+                    throw ApiError.badStatus(code: response.statusCode)
+                }
+                
                 // MARK: - 데이터파싱
                 do {
-                    let response = try JSONDecoder().decode(UserResponse.self, from: jsonData)
-                    completion(.success(response))
+                    let response = try JSONDecoder().decode(UserResponse.self, from: data)
+                    return response
                     // 파싱에 실패하면 에러
                 } catch {
-                    completion(.failure(.passingError))
+                    throw ApiError.passingError
                 }
-            }
-            
-        }.resume()
+                
+            })
+        
     }
     
     /// - Parameters:
@@ -528,6 +524,7 @@ extension BeautistUserApi {
         }.resume()
     }
     
+    // ⭐️
     /// - Parameters:
     ///   - userName: 유저닉네임
     ///   - email: 유저이메일
@@ -541,62 +538,30 @@ extension BeautistUserApi {
                 self.loginWithObservable(userName: userName,
                                          password: password)
             }
-            /// 회원가입 여부와 로그인 여부를 공유
+        /// 회원가입 여부와 로그인 여부를 공유
             .share(replay: 1)
-
+        
     }
     
-    
+    // ⭐️
     //sessionToken: String, objectId: String
     /// - Parameters:
     ///   - sessionTokens: 삭제할 유저 토큰 배열
     ///   - ObjectIds: 삭제할 유저 Id 배열
-    ///   - completion: 삭제가 완료된 아이디
-    // MARK: - 유저 동시 삭제 / 동시 API 호출⭐️
-    static func deleteSelectedUsersWithObservable(deleteUserTokenAndIdDictionary: [String:String],
-                                                  completion: @escaping ([String:String]) -> Void) {
+    // MARK: - 동시 유저 삭제 / 동시 API 호출⭐️
+    static func deleteSelectedUsersWithObservable(deleteUserTokenAndIdDictionary: [String:String]) -> Observable<[String:String]> {
         
-        
-        // Create a dispatch group
-        let group = DispatchGroup()
-        
-        // 성공적으로 삭제가 된 유저들
-        var deletedUserInformationDictionary: [String:String] = [:]
-        
-        deleteUserTokenAndIdDictionary.forEach { keyTokenValueId in
+        let apiCallObservables = deleteUserTokenAndIdDictionary.map { id -> Observable<[String:String]> in
+
+           return self.deleteUserWithObservable(sessionToken: id.key, objectId: id.value)
+                .map { Observable.just([$0.sessionToken ?? "" : $0.objectID ?? ""])}
+                .compactMap {$0}
+                .flatMap{$0}
             
-            
-            // 디스패치 그룹에 넣음⭐️
-            group.enter()
-            
-            self.deleteUserAPI(sessionToken: keyTokenValueId.key, objectId: keyTokenValueId.value) { result in
-                switch result {
-                case .success(_):
-                    //
-                    //                    guard let userId = response.objectID else { return }
-                    //                    guard let tokenId = response.sessionToken else { return }
-                    
-                    // 삭제된 토큰과 아이디를 삭제된 토큰, 아이디 배열에 넣어주기
-                    deletedUserInformationDictionary.updateValue(keyTokenValueId.value, forKey: keyTokenValueId.key)
-                    
-                case .failure(let failure):
-                    print("inner deleteUserAPI - failure: \(failure)")
-                    
-                }
-                
-                group.leave()
-                
-            }// 단일 삭제 api 호출
+        
         }
-        
-        // Configure a completion callback
-        group.notify(queue: .main) {
-            // All requests completed
-            print("모든 유저 삭제됨")
-            completion(deletedUserInformationDictionary)
-        }
-        
-        
+           
+        return Observable.merge(apiCallObservables).compactMap{ $0 }
         
     }
     
