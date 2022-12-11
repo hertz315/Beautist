@@ -25,6 +25,8 @@ enum BeautistUserApi {
         case notAllowUrl
         case unAuthorized
         case jsonEncodingError
+        case decodingError
+        case userNotCreated
         case unKnown(_ error: Error?)
         case badStatus(code: Int)
         
@@ -46,6 +48,10 @@ enum BeautistUserApi {
                 return "올바른 url이 아닙니다"
             case .jsonEncodingError:
                 return "유효한 Json형식이 아닙니다"
+            case .decodingError:
+                return "디코딩에러입니다"
+            case .userNotCreated:
+                return "유저 생성이 안됬습니다(오브젝트 아이디가 없습니다)"
             }
         }
         
