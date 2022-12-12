@@ -5,13 +5,13 @@
 //  Created by Hertz on 12/9/22.
 //
 
-import Foundation
-import Combine
+//import Foundation
+//import Combine
 
-class BueatistViewModel: ObservableObject {
+//class BueatistViewModel: ObservableObject {
     
     // MARK: - 뷰모델 생성 init
-    init() {
+//    init() {
         
 //        print(#fileID, #function, #line, "⭐️뷰모델 생성")
         
@@ -137,27 +137,27 @@ class BueatistViewModel: ObservableObject {
 //        }
         
         
-    }// init종료지점
+//    }// init종료지점
     
     // MARK: - API 에러처리
     /// API 에러처리
     /// - Parameter err: API 에러
-    fileprivate func handleError(_ err: Error) {
-        
-        if err is BeautistUserApi.ApiError {
-            let apiError = err as! BeautistUserApi.ApiError
-            
-            print("handleError: err \(apiError.info)")
-            
-            switch apiError {
-            case .passingError:
-                print("파싱에러")
-            case .unAuthorized:
-                print("사용자 인증안됨")
-            default:
-                print("그밖에 에러")
-            }
-        }
-    }
-    
-}
+//    fileprivate func handleError(_ err: Error) {
+//        
+//        if err is BeautistUserApi.ApiError {
+//            let apiError = err as! BeautistUserApi.ApiError
+//            
+//            print("handleError: err \(apiError.info)")
+//            
+//            switch apiError {
+//            case .passingError:
+//                print("파싱에러")
+//            case .unAuthorized:
+//                print("사용자 인증안됨")
+//            default:
+//                print("그밖에 에러")
+//            }
+//        }
+//    }
+//    
+//}

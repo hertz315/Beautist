@@ -8,9 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		5B198815B7D903B47A4051B2 /* Pods_Bueatist.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 368DAA3CA23B37B9726635C8 /* Pods_Bueatist.framework */; };
-		E0305B902945DBB800D47F42 /* BeautistViewModel+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0305B8F2945DBB800D47F42 /* BeautistViewModel+Combine.swift */; };
+		E0305B902945DBB800D47F42 /* BeautistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0305B8F2945DBB800D47F42 /* BeautistViewModel.swift */; };
 		E0305B932946168F00D47F42 /* CombineCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = E0305B922946168F00D47F42 /* CombineCocoa */; };
 		E0305B962946292800D47F42 /* CombineExt in Frameworks */ = {isa = PBXBuildFile; productRef = E0305B952946292800D47F42 /* CombineExt */; };
+		E0305B992947325900D47F42 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0305B982947325900D47F42 /* SignUpView.swift */; };
+		E0305B9B2947352E00D47F42 /* OnBoardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0305B9A2947352E00D47F42 /* OnBoardingView.swift */; };
+		E0305B9D294736B700D47F42 /* LogInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0305B9C294736B700D47F42 /* LogInView.swift */; };
 		E0473F7B29425F8D008C8F80 /* BeautistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473F7A29425F8D008C8F80 /* BeautistApp.swift */; };
 		E0473F7D29425F8D008C8F80 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473F7C29425F8D008C8F80 /* ContentView.swift */; };
 		E0473F7F29425F8E008C8F80 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0473F7E29425F8E008C8F80 /* Assets.xcassets */; };
@@ -33,7 +36,10 @@
 		368DAA3CA23B37B9726635C8 /* Pods_Bueatist.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bueatist.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		958DD33DBB7A3DABC1A2A0B0 /* Pods-Bueatist.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bueatist.debug.xcconfig"; path = "Target Support Files/Pods-Bueatist/Pods-Bueatist.debug.xcconfig"; sourceTree = "<group>"; };
 		B7FE191ADB43AAB2E7E8EAB1 /* Pods-Bueatist.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bueatist.release.xcconfig"; path = "Target Support Files/Pods-Bueatist/Pods-Bueatist.release.xcconfig"; sourceTree = "<group>"; };
-		E0305B8F2945DBB800D47F42 /* BeautistViewModel+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BeautistViewModel+Combine.swift"; sourceTree = "<group>"; };
+		E0305B8F2945DBB800D47F42 /* BeautistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeautistViewModel.swift; sourceTree = "<group>"; };
+		E0305B982947325900D47F42 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		E0305B9A2947352E00D47F42 /* OnBoardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingView.swift; sourceTree = "<group>"; };
+		E0305B9C294736B700D47F42 /* LogInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInView.swift; sourceTree = "<group>"; };
 		E0473F7729425F8D008C8F80 /* Bueatist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bueatist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0473F7A29425F8D008C8F80 /* BeautistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeautistApp.swift; sourceTree = "<group>"; };
 		E0473F7C29425F8D008C8F80 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -76,6 +82,16 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		E0305B972947319E00D47F42 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E0305B982947325900D47F42 /* SignUpView.swift */,
+				E0305B9A2947352E00D47F42 /* OnBoardingView.swift */,
+				E0305B9C294736B700D47F42 /* LogInView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		E0473F6E29425F8D008C8F80 = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +113,7 @@
 		E0473F7929425F8D008C8F80 /* Bueatist */ = {
 			isa = PBXGroup;
 			children = (
+				E0305B972947319E00D47F42 /* Views */,
 				E0473F9329436945008C8F80 /* Extentions */,
 				E0473F90294337DB008C8F80 /* Data */,
 				E0473F8D294334AC008C8F80 /* ViewModel */,
@@ -133,7 +150,7 @@
 			children = (
 				E0473F8E294334BF008C8F80 /* BueatistViewModel.swift */,
 				E0473FA62944B21F008C8F80 /* BeautistViewModel+Rx.swift */,
-				E0305B8F2945DBB800D47F42 /* BeautistViewModel+Combine.swift */,
+				E0305B8F2945DBB800D47F42 /* BeautistViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -294,13 +311,16 @@
 				E0473FA72944B21F008C8F80 /* BeautistViewModel+Rx.swift in Sources */,
 				E0473FA92945D42C008C8F80 /* BeautistUserApi+Combine.swift in Sources */,
 				E0473F92294337F3008C8F80 /* UserResponse.swift in Sources */,
-				E0305B902945DBB800D47F42 /* BeautistViewModel+Combine.swift in Sources */,
+				E0305B992947325900D47F42 /* SignUpView.swift in Sources */,
+				E0305B902945DBB800D47F42 /* BeautistViewModel.swift in Sources */,
 				E0473FA52944A93A008C8F80 /* BeautistUserApi.swift in Sources */,
 				E0473F8F294334BF008C8F80 /* BueatistViewModel.swift in Sources */,
+				E0305B9D294736B700D47F42 /* LogInView.swift in Sources */,
 				E0473F7D29425F8D008C8F80 /* ContentView.swift in Sources */,
 				E0473F7B29425F8D008C8F80 /* BeautistApp.swift in Sources */,
 				E0473F9529436962008C8F80 /* URL + Ext.swift in Sources */,
 				E0473F8C29433071008C8F80 /* BeautistUserApi+Rx.swift in Sources */,
+				E0305B9B2947352E00D47F42 /* OnBoardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +458,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -468,6 +489,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

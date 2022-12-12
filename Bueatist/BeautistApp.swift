@@ -10,13 +10,14 @@ import SwiftUI
 @main
 struct BeautistApp: App {
     
-    @StateObject var beautistVM = BueatistViewModel()
+//    @StateObject var beautistVM = BueatistViewModel()
 //    @StateObject var beautistRxVM = BeautistViewModelRx()
-    @StateObject var beautistCombineVM = BeautistViewModelCombine()
+    @StateObject var beautistVM = BeautistViewModel()
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+//            ContentView()
+            OnBoardingView()
         }
     }
 }
