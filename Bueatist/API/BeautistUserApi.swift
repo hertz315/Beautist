@@ -13,8 +13,10 @@ enum BeautistUserApi {
     // MARK: - 전처리
 #if DEBUG // 디버그
     static let baseURL = "https://parseapi.back4app.com/"
+    static let imageString = ".png"
 #else // 릴리즈
     static let baseURL = "https://parseapi.back4app.com/"
+    static let imageString = ".png"
 #endif
     
     /// API에러타입 정의

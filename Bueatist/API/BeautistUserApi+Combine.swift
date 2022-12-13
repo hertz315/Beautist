@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import CombineExt
+import SwiftUI
 
 extension BeautistUserApi {
     
@@ -17,13 +18,18 @@ extension BeautistUserApi {
     ///   - email: 유저이메일
     ///   - password: 유저패스워드
     // MARK: - 회원가입 Api - "POST"
-    static func signupWithPublisher(userName: String, email: String, password: String) -> AnyPublisher<UserResponse, ApiError> {
+    static func signUpWithPublisher(userName: String, email: String, passWord: String, profileImageString: String, isFavorite: Bool = true) -> AnyPublisher<UserResponse, ApiError> {
         
         /// 파람
-        let requestParams: [String:Any] = [
-            "username":userName,
-            "email":email,
-            "password":password
+        let requestParams: [String : Any]  = [
+            "username": userName,
+            "email": email,
+            "isFavorite": isFavorite,
+            "profilePhoto": [
+                "__type": "File",
+                "name": profileImageString
+            ],
+            "password": passWord,
         ]
         
         // MARK: - URLRequest를 만든다
@@ -44,7 +50,7 @@ extension BeautistUserApi {
         do {
             // 딕셔너리를 JSONData 로 만들기
             let jsonData: Data = try JSONSerialization.data(withJSONObject: requestParams, options: [.prettyPrinted])
-            // JSON형태로 만든 데이터를 httpBody에 넣기
+            // ⭐️JSON형태로 만든 데이터를 httpBody에 넣기
             urlRequest.httpBody = jsonData
         } catch {
             // JSON serialization failed
@@ -96,14 +102,14 @@ extension BeautistUserApi {
     ///   - userName: 유저이름
     ///   - password: 유저패스워드
     // MARK: - 로그인하기 API - "GET"
-    static func loginWithPublisher(userName: String, password: String) -> AnyPublisher<UserResponse, ApiError> {
+    static func logInWithPublisher(userName: String, passWord: String) -> AnyPublisher<UserResponse, ApiError> {
         
         // MARK: - URLRequest를 만든다
         // https://parseapi.back4app.com/login?username=hertz315&password=%40%40Ghdrn315
         var urlComponents = URLComponents(string: baseURL + "login?")!
         urlComponents.queryItems = [
             URLQueryItem(name: "username", value: userName),
-            URLQueryItem(name: "password", value: password)
+            URLQueryItem(name: "password", value: passWord)
         ]
         
         guard let url = urlComponents.url else {
@@ -606,15 +612,18 @@ extension BeautistUserApi {
     ///   - email: 유저이메일
     ///   - password: 유저페스워드
     // MARK: - 회원가입하고 로그인하기 / 연쇄 API 호출⭐️
-    static func signupUserAndLoginUserWithPublisher(userName: String, email: String, password: String) -> AnyPublisher<UserResponse, ApiError> {
-        // 회원가입이 성공하면 리턴 그후 FlatMap오퍼레이터 사용하여 로그인 API 호출
-        return self.signupWithPublisher(userName: userName, email: email, password: password)
-            .map { _ in
-                self.loginWithPublisher(userName: userName, password: password)
-            }
-            .switchToLatest()
-            .eraseToAnyPublisher()
-
+    static func signUpAndLogInWithPublisher(userName: String, email: String, passWord: String, profileImageString: String) -> AnyPublisher<UserResponse, ApiError> {
+        
+        return self.signUpWithPublisher(userName: userName,
+                                        email: email,
+                                        passWord: passWord,
+                                        profileImageString: profileImageString,
+                                        isFavorite: true)
+        .map { _ in
+            self.logInWithPublisher(userName: userName, passWord: passWord)
+        }
+        .switchToLatest()
+        .eraseToAnyPublisher()
     }
     
     // ⭐️

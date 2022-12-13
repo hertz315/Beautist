@@ -7,19 +7,19 @@
 
 import Foundation
 import Combine
+import UIKit
+import SwiftUI
 
 final class BeautistViewModel: ObservableObject {
     
-    // MARK: - 📌
+    // MARK: - 📌 필드 입력
     @Published var userName: String = ""
-    @Published var passWord: String = ""
     @Published var sesstionToken: String = ""
     @Published var objectId: String = ""
+    @Published var thumbNailPhotoString: String = ""
     
-    
-    @Published var errorMessage: String = ""
-    
-    // MARK: - 비밀번호 퍼블리셔
+    // MARK: - 👀비밀번호 퍼블리셔
+    @Published var passWord: String = ""
     // 비밀 번호 퍼블리셔
     @Published var checkPassWord1: String = ""
     @Published var checkPassWord2: String = ""
@@ -31,33 +31,41 @@ final class BeautistViewModel: ObservableObject {
     @Published var passwordValidCheck: Bool = true
     
     
-    // MARK: - 이메일 퍼블리셔
+    // MARK: - 👀프로필 이미지 등록
+    @Published var profileImagePickerPresented = false
+    @Published var selectedProfileImage: UIImage?
+    @Published var profileImage: Image?
+    @Published var profileImageString: String = ""
+    
+    
+    // MARK: - 👀썸네일 이미지
+    @Published var thumbNailImagePickerPresented = false
+    @Published var selectedThumbNailImage: UIImage?
+    @Published var thumbNailImage: Image?
+    @Published var thumbNailImageString: String = ""
+    
+    
+    
+    // MARK: - 📧이메일 퍼블리셔
     @Published var email: String = ""
     @Published var emailValid: Bool = false
-    // 이메일에 @이 들어있는지 확인 여부
     @Published var emailValidCheck: Bool = false
     
     
-    // MARK: - 회원가입 준비 완료
+    // MARK: - ✅회원가입 준비 완료
     @Published var signupReadyComplete: Bool = false
     
     
-    // 찌꺼기 청소기⭐️
+    // MARK: - 찌거기 청소기⭐️
     var subscriptions = Set<AnyCancellable>()
     
-    // MARK: - 회원가입 ⭐️
-    func signup() {
-        BeautistUserApi.signupWithPublisher(userName: userName, email: email, password: passWord)
-            .sink { completion in
-                switch completion {
-                case .finished:
-                    print("signup : 완료후 스트림 끊킴 ⭐️")
-                case .failure(let failure):
-                    self.handleError(failure)
-                }
-            } receiveValue: { response in
-                print("\(response)⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️⭐️")
-            }
+    
+    // MARK: - 이미지 로드
+    func loadImage() {
+        $selectedProfileImage
+            .compactMap{ $0 }
+            .map({ return Image(uiImage: $0) })
+            .assign(to: \.self.profileImage, on: self)
             .store(in: &subscriptions)
     }
     
@@ -135,91 +143,56 @@ final class BeautistViewModel: ObservableObject {
             .store(in: &subscriptions)
     }
     
+    // MARK: - 회원가입 처리
+    func signUp() {
+        BeautistUserApi.signUpWithPublisher(userName: userName, email: email, passWord: passWord, profileImageString: profileImageString)
+            .sink { [weak self] completion in
+                guard let self = self else {return}
+                
+                switch completion {
+                case .finished:
+                    print("VM : signupWithPublisher : 회원가입 : (완료)스트림끊킴❗️")
+                case .failure(let failure):
+                    self.handleError(failure)
+                }
+            } receiveValue: { response in
+                print("VM / signupWithPublisher / \(response)")
+            }
+            .store(in: &subscriptions)
+    }
     
+    // MARK: - 회원가입 한후 로그인 처리 ⭐️
+    func signUpAndLogIn() {
+        BeautistUserApi.signUpAndLogInWithPublisher(userName: userName,
+                                                    email: email,
+                                                    passWord: passWord,
+                                                    profileImageString: profileImageString)
+        .sink { [weak self] completion in
+            guard let self = self else { return }
+            switch completion {
+            case .finished:
+                print("❗️회원가입 한후 로그인 스트림 끊킴")
+            case .failure(let failure):
+                self.handleError(failure)
+            }
+        } receiveValue: { sucessResponse in
+            print("vm : signUpAndLogIn : \(sucessResponse)")
+        }
+        .store(in: &subscriptions)
+
+    }
+
+  
     
     // MARK: - 뷰모델 생성 init
     init() {
+        
         // MARK: - 비밀번호 유효성
         self.passwordTextFieldValidCheck()
         // MARK: - 이메일 유효성
         self.emailAdressValidCheck()
         // MARK: - 모든 준비 완료 여부체크
         self.signupComplete()
-      
-        
-        //        // MARK: - 회원가입
-        //        BeautistUserApi.signupWithPublisher(userName: "hon315", email: "hon315@gmail.com", password: "hon315")
-        //        // sink 로 이벤트 받기(구독) ⭐️
-        //            .sink { [weak self] completion in
-        //                guard let self = self else {return}
-        //
-        //                switch completion {
-        //                case .finished:
-        //                    print("VM : signupWithPublisher : 회원가입 : (완료)스트림끊킴❗️")
-        //                case .failure(let failure):
-        //                    self.handleError(failure)
-        //                }
-        //            } receiveValue: { response in
-        //                print("VM / signupWithPublisher / \(response)")
-        //            }
-        //            .store(in: &subscriptions)
-        
-        
-        
-        //        // MARK: - 로그인
-        //        BeautistUserApi.loginWithPublisher(userName: "hon315", password: "hon315")
-        //            .sink { [weak self] completion in // 클로저이기 때문에 강한참조예방
-        //
-        //                guard let self = self else { return }
-        //                switch completion {
-        //                case .finished: // 완료되었을
-        //                    print("VM : loginWithPublisher : 로그인 :(완료)스트림끊킴❗️")
-        //                case .failure(let failure): // 실패되었을때
-        //                    self.handleError(failure)
-        //                }
-        //
-        //
-        //            } receiveValue: { response in
-        //                print("VM / loginWithPublisher / \(response)")
-        //            }
-        //            .store(in: &subscriptions)
-        
-        
-        //        BeautistUserApi.signupUserAndLoginUserWithPublisher(userName: "m",
-        //                                                            email: "m@gmail.com",
-        //                                                            password: "m")
-        //                    .sink { [weak self] completion in // 클로저이기 때문에 강한참조예방
-        //                        guard let self = self else { return }
-        //                        switch completion {
-        //                        case .finished: // 완료되었을
-        //                            print("VM : signupUserAndLoginUserWithPublisher : 회원가입 후 로그인 :(완료)스트림끊킴❗️")
-        //                        case .failure(let failure): // 실패되었을때
-        //                            self.handleError(failure)
-        //                        }
-        //
-        //                    } receiveValue: { response in
-        //                        print("VM / signupUserAndLoginUserWithPublisher / \(response)")
-        //                    }
-        //                    .store(in: &subscriptions)
-        
-        //        BeautistUserApi.deleteSelectedUsersWithPublisher(deleteUserTokenAndIdDictionary: [
-        //            "r:53a90e1004490c8cf28902ed25a298ab" : "rV7sQsgLEj",
-        //            "r:ba7548720b6664c2ef430028e117ae0c" : "ZE3eAP1hC8",
-        //            "r:0a2a66b54a78b2f56844326f0cc1e2cc" : "Dh5MlegJhR"
-        //        ])
-        //        .sink { [weak self] completion in // 클로저이기 때문에 강한참조예방
-        //            guard let self = self else { return }
-        //            switch completion {
-        //            case .finished: // 완료되었을
-        //                print("VM : deleteSelectedUsersWithPublisher : 동시 회원 삭제 :(완료)스트림끊킴❗️")
-        //            case .failure(let failure): // 실패되었을때
-        //                self.handleError(failure)
-        //            }
-        //
-        //        } receiveValue: { response in
-        //            print("VM / deleteSelectedUsersWithPublisher / \(response)")
-        //        }
-        //        .store(in: &subscriptions)
         
         
     }// init종료지점

@@ -4,18 +4,18 @@
 //
 //  Created by Hertz on 12/9/22.
 //
-
+//
 //import Foundation
 //import Combine
-
+//
 //class BueatistViewModel: ObservableObject {
-    
-    // MARK: - 뷰모델 생성 init
+//    
+////     MARK: - 뷰모델 생성 init
 //    init() {
-        
+//        
 //        print(#fileID, #function, #line, "⭐️뷰모델 생성")
-        
-//        강한 참조 조심
+//        
+////        강한 참조 조심
 //        BeautistUserApi.loginAPI(userName: "honghaha1996", password: "@@Ghdrn315") { [weak self] result in
 //            guard let self = self else { return }
 //            switch result {
@@ -124,8 +124,8 @@
 //
 //
 //        }
-        
-        
+//        
+//        
 //        // MARK: - 클로저 기반 동시 API 처리
 //        BeautistUserApi.deleteSelectedUsersAPI(
 //            deleteUserTokenAndIdDictionary: [
@@ -135,13 +135,13 @@
 //            print(deletedDictionary.keys)
 //            print(deletedDictionary.values)
 //        }
-        
-        
+//        
+//        
 //    }// init종료지점
-    
-    // MARK: - API 에러처리
-    /// API 에러처리
-    /// - Parameter err: API 에러
+//    
+//     MARK: - API 에러처리
+//    / API 에러처리
+//    / - Parameter err: API 에러
 //    fileprivate func handleError(_ err: Error) {
 //        
 //        if err is BeautistUserApi.ApiError {

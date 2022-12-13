@@ -14,8 +14,10 @@ struct SignUpView: View {
     // MARK: - 바디⭐️
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
+            // 프로필 사진 등록 섹션
+            chooseProfileImageSection
+                .padding()
             VStack(alignment: .leading) {
-                
                 titleSection
                     .padding()
                 
@@ -31,9 +33,41 @@ struct SignUpView: View {
                 signupButton
                     .padding()
                 
-                
             } // VStack
         } // Scrollview
+    }
+    
+    // MARK: - 프로필사진 등록 섹션
+    var chooseProfileImageSection: some View {
+        VStack {
+            /// 이미지피커
+            Button {
+                print("이미지 띄우기")
+                signupVM.profileImagePickerPresented.toggle()
+                
+            } label: { // 버튼의 label은 프로필 이미지가 없으면 plus 이미지를, 있으면 프로필 이미지를 보여준다.
+                if let profileImage = signupVM.profileImage {
+                    profileImage
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 150, height: 150)
+                        .clipShape(Circle())
+                } else {
+                    Text("Click here!")
+                        .font(.system(size: 18, weight: .semibold))
+                        .frame(width: 180, height: 180)
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(style: StrokeStyle(lineWidth: 2, dash: [5])))
+                }
+            }
+            .padding()
+            .sheet(isPresented: $signupVM.profileImagePickerPresented) {
+                signupVM.loadImage()
+            } content: {
+                CustomPhotoPicker(signUpVM: signupVM, selectedImage: $signupVM.selectedProfileImage)
+            }
+
+        }
     }
     
     // MARK: - 타이틀 섹션 ("회원가입)
@@ -169,7 +203,7 @@ struct SignUpView: View {
                             .font(.headline)
                     )
                     .onTapGesture {
-                        signupVM.signup()
+                        signupVM.signUpAndLogIn()
                     }
             } else {
                 EmptyView()

@@ -16,6 +16,7 @@ struct UserResponse: Codable {
     let objectID, username, email, createdAt, password: String?
     let updatedAt: String?
     let acl: ACL?
+    let profilePhoto: Photo?
     let type, className, sessionToken: String?
 
     enum CodingKeys: String, CodingKey {
@@ -25,6 +26,7 @@ struct UserResponse: Codable {
         case type = "__type"
         case className, sessionToken
         case password
+        case profilePhoto
     }
 }
 
@@ -41,6 +43,16 @@ struct ACL: Codable {
     enum CodingKeys: String, CodingKey {
         case empty = "*"
         case ndDZyHxTVc
+    }
+}
+
+// MARK: - Photo
+struct Photo: Codable {
+    let type, name: String?
+
+    enum CodingKeys: String, CodingKey {
+        case type = "__type"
+        case name
     }
 }
 
