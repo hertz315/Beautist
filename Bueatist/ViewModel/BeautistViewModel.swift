@@ -55,6 +55,9 @@ final class BeautistViewModel: ObservableObject {
     // MARK: - ✅회원가입 준비 완료
     @Published var signupReadyComplete: Bool = false
     
+    // MARK: - 📍주소
+    @Published var isAdressPresented: Bool = false
+    @Published var adressString: String = ""
     
     // MARK: - 찌거기 청소기⭐️
     var subscriptions = Set<AnyCancellable>()

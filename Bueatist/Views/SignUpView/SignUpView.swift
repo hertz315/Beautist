@@ -30,6 +30,9 @@ struct SignUpView: View {
                 emailSection
                     .padding(.vertical)
                 
+                adressSection
+                    .padding(.vertical)
+                
                 signupButton
                     .padding()
                 
@@ -66,7 +69,7 @@ struct SignUpView: View {
             } content: {
                 CustomPhotoPicker(signUpVM: signupVM, selectedImage: $signupVM.selectedProfileImage)
             }
-
+            
         }
     }
     
@@ -185,6 +188,41 @@ struct SignUpView: View {
             }
             
         }
+    }
+    
+    // MARK: - 주소찾기 섹션
+    var adressSection: some View {
+        VStack(alignment: .leading) {
+            HStack(spacing: 5) {
+                Text("주소입력")
+                    .font(.headline)
+                Image("RequireStar")
+                    .resizable()
+                    .frame(width: 15, height: 15)
+                
+            }
+            .padding(.horizontal)
+            
+            HStack {
+                TextField("닉네임을 입력하세요", text: $signupVM.userName)
+                    .onTapGesture {
+                        signupVM.isAdressPresented = true
+                    }
+                    .sheet(isPresented: $signupVM.isAdressPresented) {
+                        FindAdressView(signUpVM: signupVM)
+                    }
+                
+                
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(Color.gray)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .padding(.horizontal)
+        }
+        
+        
     }
     
     // MARK: - 획원가입 완료 버튼 섹션

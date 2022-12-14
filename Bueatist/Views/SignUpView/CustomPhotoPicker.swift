@@ -65,7 +65,6 @@ struct CustomPhotoPicker: UIViewControllerRepresentable {
                             let filename = url.lastPathComponent;
                             print(filename)
                             self.parent.signUpVM.profileImageString = filename
-//                            signUpVM.profileImageString = filename
                         }
                     }
                 }

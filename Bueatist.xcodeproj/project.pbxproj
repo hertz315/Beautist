@@ -20,7 +20,6 @@
 		E0473F8229425F8E008C8F80 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0473F8129425F8E008C8F80 /* Preview Assets.xcassets */; };
 		E0473F8929426774008C8F80 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473F8829426774008C8F80 /* AppDelegate.swift */; };
 		E0473F8C29433071008C8F80 /* BeautistUserApi+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473F8B29433071008C8F80 /* BeautistUserApi+Rx.swift */; };
-		E0473F8F294334BF008C8F80 /* BueatistViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473F8E294334BF008C8F80 /* BueatistViewModel.swift */; };
 		E0473F92294337F3008C8F80 /* UserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473F91294337F3008C8F80 /* UserResponse.swift */; };
 		E0473F9529436962008C8F80 /* URL + Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0473F9429436962008C8F80 /* URL + Ext.swift */; };
 		E0473F9829436FDB008C8F80 /* MultipartForm in Frameworks */ = {isa = PBXBuildFile; productRef = E0473F9729436FDB008C8F80 /* MultipartForm */; };
@@ -35,6 +34,8 @@
 		E075BDF82948FC9400DEB081 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = E075BDF72948FC9400DEB081 /* Home.swift */; };
 		E075BDFB2949000500DEB081 /* HomeVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = E075BDFA2949000500DEB081 /* HomeVM.swift */; };
 		E075BDFD2949004200DEB081 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = E075BDFC2949004200DEB081 /* Place.swift */; };
+		E075BDFF294A03E100DEB081 /* FindAdressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E075BDFE294A03E100DEB081 /* FindAdressView.swift */; };
+		E075BE01294A0B1E00DEB081 /* FindAdress.swift in Sources */ = {isa = PBXBuildFile; fileRef = E075BE00294A0B1E00DEB081 /* FindAdress.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,7 +53,6 @@
 		E0473F8129425F8E008C8F80 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E0473F8829426774008C8F80 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E0473F8B29433071008C8F80 /* BeautistUserApi+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BeautistUserApi+Rx.swift"; sourceTree = "<group>"; };
-		E0473F8E294334BF008C8F80 /* BueatistViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BueatistViewModel.swift; sourceTree = "<group>"; };
 		E0473F91294337F3008C8F80 /* UserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponse.swift; sourceTree = "<group>"; };
 		E0473F9429436962008C8F80 /* URL + Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL + Ext.swift"; sourceTree = "<group>"; };
 		E0473FA42944A93A008C8F80 /* BeautistUserApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeautistUserApi.swift; sourceTree = "<group>"; };
@@ -63,6 +63,8 @@
 		E075BDF72948FC9400DEB081 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		E075BDFA2949000500DEB081 /* HomeVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVM.swift; sourceTree = "<group>"; };
 		E075BDFC2949004200DEB081 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
+		E075BDFE294A03E100DEB081 /* FindAdressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindAdressView.swift; sourceTree = "<group>"; };
+		E075BE00294A0B1E00DEB081 /* FindAdress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindAdress.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 				E075BDF22948976A00DEB081 /* SignUpView */,
 				E0305B9A2947352E00D47F42 /* OnBoardingView.swift */,
 				E0305B9C294736B700D47F42 /* LogInView.swift */,
+				E075BDFE294A03E100DEB081 /* FindAdressView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -124,6 +127,7 @@
 		E0473F7929425F8D008C8F80 /* Bueatist */ = {
 			isa = PBXGroup;
 			children = (
+				E075BE02294A180E00DEB081 /* 잡동사니 */,
 				E0305B972947319E00D47F42 /* Views */,
 				E0473F9329436945008C8F80 /* Extentions */,
 				E0473F90294337DB008C8F80 /* Models */,
@@ -159,8 +163,6 @@
 		E0473F8D294334AC008C8F80 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				E0473F8E294334BF008C8F80 /* BueatistViewModel.swift */,
-				E0473FA62944B21F008C8F80 /* BeautistViewModel+Rx.swift */,
 				E0305B8F2945DBB800D47F42 /* BeautistViewModel.swift */,
 				E075BDFA2949000500DEB081 /* HomeVM.swift */,
 			);
@@ -190,6 +192,7 @@
 				E0305B982947325900D47F42 /* SignUpView.swift */,
 				E075BDF52948C54D00DEB081 /* CustomPhotoPicker.swift */,
 				E075BDF32948978100DEB081 /* ImagePicker.swift */,
+				E075BE00294A0B1E00DEB081 /* FindAdress.swift */,
 			);
 			path = SignUpView;
 			sourceTree = "<group>";
@@ -200,6 +203,15 @@
 				E075BDF72948FC9400DEB081 /* Home.swift */,
 			);
 			path = HomeView;
+			sourceTree = "<group>";
+		};
+		E075BE02294A180E00DEB081 /* 잡동사니 */ = {
+			isa = PBXGroup;
+			children = (
+				E0473FA62944B21F008C8F80 /* BeautistViewModel+Rx.swift */,
+			);
+			name = "잡동사니";
+			path = "잡동사니";
 			sourceTree = "<group>";
 		};
 		F7DFDAD8275652BEF5898EF2 /* Frameworks */ = {
@@ -339,6 +351,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0473F8929426774008C8F80 /* AppDelegate.swift in Sources */,
+				E075BE01294A0B1E00DEB081 /* FindAdress.swift in Sources */,
 				E075BDFD2949004200DEB081 /* Place.swift in Sources */,
 				E0473FA72944B21F008C8F80 /* BeautistViewModel+Rx.swift in Sources */,
 				E0473FA92945D42C008C8F80 /* BeautistUserApi+Combine.swift in Sources */,
@@ -349,8 +362,8 @@
 				E075BDF82948FC9400DEB081 /* Home.swift in Sources */,
 				E0305B902945DBB800D47F42 /* BeautistViewModel.swift in Sources */,
 				E0473FA52944A93A008C8F80 /* BeautistUserApi.swift in Sources */,
-				E0473F8F294334BF008C8F80 /* BueatistViewModel.swift in Sources */,
 				E0305B9D294736B700D47F42 /* LogInView.swift in Sources */,
+				E075BDFF294A03E100DEB081 /* FindAdressView.swift in Sources */,
 				E0473F7D29425F8D008C8F80 /* ContentView.swift in Sources */,
 				E0473F7B29425F8D008C8F80 /* BeautistApp.swift in Sources */,
 				E0473F9529436962008C8F80 /* URL + Ext.swift in Sources */,
@@ -413,7 +426,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -467,7 +480,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -495,7 +508,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -527,7 +540,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
