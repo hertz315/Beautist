@@ -51,19 +51,3 @@ struct FindAdressView: UIViewControllerRepresentable {
     
 }
 
-
-
-
-
-
-
-
-
-
-
-//
-//struct FindAdressView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        FindAdressView(signUpVM: signUpView)
-//    }
-//}

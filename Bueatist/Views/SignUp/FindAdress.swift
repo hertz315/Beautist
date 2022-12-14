@@ -29,8 +29,8 @@ class FindAdressVC: UIViewController {
     // MARK: - UI
     private func configureUI() {
         view.backgroundColor = .white
-//        setAttributes()
-//        setContraints()
+        setAttributes()
+        setContraints()
     }
 
     private func setAttributes() {
